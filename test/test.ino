@@ -10,7 +10,7 @@
   Adafruit_MCP4725 dac;
   
   uint16_t a = 0;
-  uint16_t input[1000];
+  uint16_t input[500];
   const uint16_t sine[4]  = {2048,4095,2048,0};   // At 1700 Hz     
   int delay0,delay1,delay2,delay3;
   int countData = 0;
@@ -19,11 +19,11 @@ void setup(void) {
   
   Serial.begin(115200);                         // set buadrate serial
   dac.begin(0x62);                              // set to default 
-
-  delay0 = 250*(1000/freq0 - 1000/defaultFreq);
-  delay1 = 250*(1000/freq1 - 1000/defaultFreq);
-  delay2 = 250*(1000/freq2 - 1000/defaultFreq);
-  delay3 = 250*(1000/freq3 - 1000/defaultFreq);
+  
+  delay0 = (1000000/freq0 - 1000000/defaultFreq)/4;
+  delay1 = (1000000/freq1 - 1000000/defaultFreq)/4;
+  delay2 = (1000000/freq2 - 1000000/defaultFreq)/4;
+  delay3 = (1000000/freq3 - 1000000/defaultFreq)/4;
 
   Serial.print("delay0 is ");
   Serial.println(delay0);
@@ -43,24 +43,23 @@ void loop(void) {
             input[countData] = Serial.parseInt();
             countData++;
         }
-        Serial.print(countData is ");
+        Serial.print("countData is ");
         Serial.println(countData);
         
         Serial.print("Data is ");
         for(int i=0 ; i<countData ; i++){
-            Serial.print(input[countData]);
+            Serial.print(input[i]);
             Serial.print(" ");
         }
         Serial.println();
 
         if(countData%2 != 0){
           Serial.println("Data must be even please try again");
-          break;
+          return;
         }
         
         //for(int i=0 ; i<1000 ; i++)
         for(int k=0 ; k<countData ; k+=2){
-          
           if(input[k] == 0){                
             if(input[k+1] == 0){                 // for input 00 - 500 Hz
               for(int j=0 ; j<3 ; j++)
@@ -97,4 +96,3 @@ void loop(void) {
       } 
      }
 }
-
