@@ -79,6 +79,6 @@ void loop(void)
       
       check = false;                                            // change statement for do this 1 time per a signal
     } 
-    prev = input;
+    prev = input;                                               // save previos state
 }
 
